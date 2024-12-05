@@ -28,6 +28,9 @@ class LoginFragment : Fragment() {
     }
 
     private fun initListerners() {
+        binding.btnLogin.setOnClickListener{
+            findNavController().navigate(R.id.action_global_homeFragment)
+        }
         binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }

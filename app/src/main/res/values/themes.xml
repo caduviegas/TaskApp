@@ -5,10 +5,20 @@
          <item name="colorPrimary">@color/color_default</item>
         <item name="colorPrimaryVariant">@color/color_default</item>
         <item name="android:windowBackground">@color/color_default</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/color_default</item>
+        <item name="colorSecondaryVariant">@color/color_default</item>
+        <item name="colorOnSecondary">@color/black</item>
 
 
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="Theme.TaskApp" parent="Base.Theme.TaskApp" />
+
+    <style name="CustomTabLayout" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
