@@ -23,7 +23,6 @@
                 android:elevation="0dp"
                 android:background="@color/color_default"
                 app:tabTextColor="@color/white"
-                app:tabTextAppearance=""
                 app:tabIndicatorColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnLogout"
