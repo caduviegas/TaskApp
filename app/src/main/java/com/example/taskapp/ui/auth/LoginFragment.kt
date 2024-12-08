@@ -5,9 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.taskapp.R
 import com.example.taskapp.databinding.FragmentLoginBinding
+import com.example.taskapp.util.showBottomSheet
 
 class LoginFragment : Fragment() {
 
@@ -28,8 +30,8 @@ class LoginFragment : Fragment() {
     }
 
     private fun initListerners() {
-        binding.btnLogin.setOnClickListener{
-            findNavController().navigate(R.id.action_global_homeFragment)
+        binding.btnLogin.setOnClickListener {
+            validateData()
         }
         binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -37,6 +39,22 @@ class LoginFragment : Fragment() {
 
         binding.btnRecover.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_recoverAccountFragment)
+        }
+    }
+
+    private fun validateData() {
+        val email = binding.edtEmail.text.toString().trim()
+        val password = binding.edtPassword.text.toString().trim()
+
+        if (email.isNotEmpty()) {
+            if(password.isNotEmpty()) {
+                findNavController().navigate(R.id.action_global_homeFragment)
+            } else {
+                showBottomSheet(message = R.string.password_empty)
+            }
+
+        } else {
+            showBottomSheet(message = R.string.email_empty)
         }
     }
 
