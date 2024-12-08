@@ -46,11 +46,11 @@ class RegisterFragment : Fragment() {
             if(password.isNotEmpty()) {
                 Toast.makeText(requireContext(),"tudo Certo.", Toast.LENGTH_SHORT).show()
             } else {
-                showBottomSheet(message = R.string.password_empty_register_fragment)
+                showBottomSheet(message = getString(R.string.password_empty_register_fragment))
             }
 
         } else {
-            showBottomSheet(message = R.string.email_empty_register_fragment)
+            showBottomSheet(message = getString(R.string.email_empty_register_fragment))
         }
     }
 

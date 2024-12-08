@@ -58,10 +58,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/bg_edit_text"
+                style="@style/EditTextTheme"
                 android:hint="Digite seu e-mail"
-                android:inputType="textEmailAddress"
-                android:padding="16dp" />
+                android:inputType="textEmailAddress" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -75,19 +74,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/bg_edit_text"
-                android:hint="Digite sua Senha"
-                android:padding="16dp" />
+                style="@style/EditTextTheme"
+                android:hint="Digite sua Senha" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/bg_btn"
-                android:text="Criar Conta"
-                android:textColor="@color/color_default"
-                app:backgroundTint="@null" />
+                style="@style/ButtonTheme"
+                android:text="Criar Conta" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
