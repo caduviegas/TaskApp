@@ -1,23 +1,44 @@
 <resources>
     <string name="app_name">TaskApp</string>
 
-
+    <!-- Status Task -->
     <string name="status_task_todo">A Fazer</string>
     <string name="status_task_doing">Fazendo</string>
     <string name="status_task_done">Feitas</string>
+
 
 
     <!-- Generic -->
     <string name="text_title_warning">Atenção</string>
     <string name="text_button_warning">Entendi</string>
     <string name="email_empty">Preencha seu email</string>
+    <string name="email_text">Email.</string>
+    <string name="password_text">Senha.</string>
     <string name="password_empty">Preencha sua senha</string>
+    <string name="hint_edit_email">Digite seu e-mail.</string>
+    <string name="hint_edit_password">Digite sua senha.</string>
+
+    <!--Login Fragment -->
+    <string name="text_title_login_fragment">Login</string>
+    <string name="text_button_register_login_fragment">Criar Conta</string>
+    <string name="text_button_recover_login_fragment">Recuperar Conta</string>
 
     <!-- Register Fragment-->
     <string name="email_empty_register_fragment">Preencha um email válido</string>
-    <string name="password_empty_register_fragment">Preencha sua senha</string>
+    <string name="password_empty_register_fragment">Preencha uma senha</string>
+    <string name="text_button_register_fragment">Criar Conta</string>
+    <string name="text_title_toolbar_register_fragment">Criar Conta</string>
 
     <!-- Form Task Fragment-->
     <string name="description_empty_form_task_fragment">Preencha uma descrição</string>
+    <string name="text_title_toolbar_form_task_fragment">Nova Tarefa</string>
+    <string name="text_description_form_task_fragment">Descrição</string>
+    <string name="text_status_form_task_fragment">Status</string>
+    <string name="text_button_form_task_fragment">Status</string>
+    <string name="hint_edit_description_form_task_fragment">Criar nova tela de login do app</string>
 
+    <!-- Recovery Account Fragment -->
+    <string name="text_info_recover_account_fragment">Informe seu e-mail de cadastro para receber \num link para alteração da senha</string>
+<string name="text_title_toolbar_recover_account_fragment">Recuperar Conta</string>
+<string name="text_button_toolbar_recover_account_fragment">Enviar</string>
 </resources>
