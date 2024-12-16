@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.taskapp.R
@@ -42,19 +43,50 @@ class TodoFragment : Fragment() {
     }
 
     private fun initRecyclerView(taskList: List<Task>) {
-        taskAdapter = TaskAdapter(requireContext(),taskList)
+        taskAdapter = TaskAdapter(requireContext(), taskList) { task, option ->
+            optionSelected(task, option)
+        }
 
         binding.rvTasks.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTasks.setHasFixedSize(true)
         binding.rvTasks.adapter = taskAdapter
     }
 
+    private fun optionSelected(task: Task, option: Int) {
+
+        when (option) {
+            TaskAdapter.SELECT_REMOVE -> {
+                Toast.makeText(
+                    requireContext(),
+                    "Removendo ${task.description}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            TaskAdapter.SELECT_EDIT -> {
+                Toast.makeText(requireContext(), "Editando ${task.description}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            TaskAdapter.SELECT_DETAILS -> {
+                Toast.makeText(requireContext(), "Detalhes ${task.description}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+            TaskAdapter.SELECT_NEXT -> {
+                Toast.makeText(requireContext(), "Next ${task.description}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
+    }
+
     private fun getTasks() = listOf<Task>(
-        Task("0", "Criar Nova Tela do App",Status.TODO),
-        Task("1", "Validar informações na tela de login",Status.TODO),
-        Task("2", "Adicionar nova funcionalidade no app",Status.TODO),
-        Task("3", "Salvar token no localmente",Status.TODO),
-        Task("4", "Criar funcionalidade de logout no app",Status.TODO),
+        Task("0", "Criar Nova Tela do App", Status.TODO),
+        Task("1", "Validar informações na tela de login", Status.TODO),
+        Task("2", "Adicionar nova funcionalidade no app", Status.TODO),
+        Task("3", "Salvar token no localmente", Status.TODO),
+        Task("4", "Criar funcionalidade de logout no app", Status.TODO),
     )
 
     override fun onDestroyView() {
