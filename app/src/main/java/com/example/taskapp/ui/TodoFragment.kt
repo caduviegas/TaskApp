@@ -32,7 +32,8 @@ class TodoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
-        initRecyclerView(getTasks())
+        initRecyclerView()
+        getTasks()
 
     }
 
@@ -42,14 +43,17 @@ class TodoFragment : Fragment() {
         }
     }
 
-    private fun initRecyclerView(taskList: List<Task>) {
-        taskAdapter = TaskAdapter(requireContext(), taskList) { task, option ->
+    private fun initRecyclerView() {
+        taskAdapter = TaskAdapter(requireContext()) { task, option ->
             optionSelected(task, option)
         }
 
-        binding.rvTasks.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvTasks.setHasFixedSize(true)
-        binding.rvTasks.adapter = taskAdapter
+        with(binding.rvTasks) {
+            layoutManager = LinearLayoutManager(requireContext())
+            setHasFixedSize(true)
+            adapter = taskAdapter
+        }
+
     }
 
     private fun optionSelected(task: Task, option: Int) {
@@ -81,13 +85,17 @@ class TodoFragment : Fragment() {
 
     }
 
-    private fun getTasks() = listOf<Task>(
-        Task("0", "Criar Nova Tela do App", Status.TODO),
-        Task("1", "Validar informações na tela de login", Status.TODO),
-        Task("2", "Adicionar nova funcionalidade no app", Status.TODO),
-        Task("3", "Salvar token no localmente", Status.TODO),
-        Task("4", "Criar funcionalidade de logout no app", Status.TODO),
-    )
+    private fun getTasks() {
+        val taskList = listOf(
+            Task("0", "Criar Nova Tela do App", Status.TODO),
+            Task("1", "Validar informações na tela de login", Status.TODO),
+            Task("2", "Adicionar nova funcionalidade no app", Status.TODO),
+            Task("3", "Salvar token no localmente", Status.TODO),
+            Task("4", "Criar funcionalidade de logout no app", Status.TODO),
+        )
+
+        taskAdapter.submitList(taskList)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
