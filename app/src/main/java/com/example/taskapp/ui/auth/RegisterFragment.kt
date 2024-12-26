@@ -72,7 +72,7 @@ class RegisterFragment : Fragment() {
 
                 } else {
                     binding.progressBar.isVisible = false
-                    Toast.makeText(requireContext(), task.exception?.message, Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), task.exception?.message, Toast.LENGTH_SHORT).show()
                 }
             }
     }
