@@ -44,6 +44,7 @@
     <string name="text_button_form_task_fragment">Salvar</string>
     <string name="hint_edit_description_form_task_fragment">Criar nova tela de login do app</string>
     <string name="text_save_success_form_task_fragment">Tarefa salva com sucesso</string>
+    <string name="text_update_success_form_task_fragment">Tarefa atualizada com sucesso</string>
     <string name="text_toolbar_update_sucess_form_task_fragment">Editando tarefa...</string>
 
     <!-- Home Fragment -->
