@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.example.taskapp.R
 import com.example.taskapp.databinding.FragmentRegisterBinding
+import com.example.taskapp.util.FirebaseHelper
 import com.example.taskapp.util.initToolbar
 import com.example.taskapp.util.showBottomSheet
 import com.google.firebase.auth.FirebaseAuth
@@ -72,7 +73,7 @@ class RegisterFragment : Fragment() {
 
                 } else {
                     binding.progressBar.isVisible = false
-                    Toast.makeText(requireContext(), task.exception?.message, Toast.LENGTH_SHORT).show()
+                    showBottomSheet(message = getString(FirebaseHelper.validError(task.exception?.message.toString())))
                 }
             }
     }
