@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.taskapp.R
 import com.example.taskapp.data.model.Status
 import com.example.taskapp.data.model.Task
@@ -25,7 +27,8 @@ class FormTaskFragment : Fragment() {
     private var _binding: FragmentFormTaskBinding? = null
     private val binding get() = _binding!!
     private lateinit var task: Task
-
+    private val args: FormTaskFragmentArgs by navArgs()
+private val viewModel:TaskViewModel by activityViewModels()
     private lateinit var reference: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private var status: Status = Status.TODO
@@ -45,6 +48,7 @@ class FormTaskFragment : Fragment() {
 
         reference = Firebase.database.reference
         auth = Firebase.auth
+        getArgs()
         initListerners()
     }
 
@@ -66,9 +70,10 @@ class FormTaskFragment : Fragment() {
 
         if (description.isNotEmpty()) {
             binding.progressBar.isVisible = true
-            if (newTask) task = Task()
-
-            task.id = reference.database.reference.push().key ?: ""
+            if (newTask) {
+                task = Task()
+                task.id = reference.database.reference.push().key ?: ""
+            }
             task.description = description
             task.status = status
             saveTask()
@@ -79,7 +84,8 @@ class FormTaskFragment : Fragment() {
     }
 
     private fun saveTask() {
-        reference.child("tasks")
+        reference
+            .child("tasks")
             .child(auth.currentUser?.uid ?: "")
             .child(task.id)
             .setValue(task).addOnCompleteListener { result ->
@@ -94,6 +100,7 @@ class FormTaskFragment : Fragment() {
                         findNavController().popBackStack()
                     } else {
                         // Editando tarefa
+                        viewModel.setUpdateTask(task)
                         binding.progressBar.isVisible = false
 
                     }
@@ -104,6 +111,34 @@ class FormTaskFragment : Fragment() {
                     )
                 }
             }
+    }
+
+    private fun configTask() {
+        newTask = false
+        status = task.status
+        binding.textToolbar.setText(R.string.text_toolbar_update_sucess_form_task_fragment)
+        binding.edtDescription.setText(task.description)
+        setStatus()
+
+    }
+
+    private fun setStatus() {
+        val id = when (task.status) {
+            Status.TODO -> R.id.rbTodo
+            Status.DOING -> R.id.rbDoing
+            else -> R.id.rbDone
+        }
+        binding.rgStatus.check(id)
+    }
+
+    private fun getArgs() {
+        args.task.let {
+            if (it != null) {
+                this.task = it
+
+                configTask()
+            }
+        }
     }
 
 
