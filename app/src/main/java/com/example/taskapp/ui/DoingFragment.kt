@@ -1,6 +1,7 @@
 package com.example.taskapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +26,9 @@ class DoingFragment : Fragment() {
 
     private var _binding: FragmentDoingBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var taskAdapter: TaskAdapter
+
     private val viewModel: TaskViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +43,9 @@ class DoingFragment : Fragment() {
 
 
         observeViewModel()
+
         initRecyclerView()
+
         getTasks()
     }
 
@@ -85,7 +90,7 @@ class DoingFragment : Fragment() {
 
         when (option) {
             TaskAdapter.SELECT_BACK -> {
-             task.status = Status.TODO
+                task.status = Status.TODO
                 updateTask(task)
             }
 
@@ -117,6 +122,34 @@ class DoingFragment : Fragment() {
         }
 
     }
+
+    private fun getTasks() {
+        FirebaseHelper.getDatabase()
+            .child("tasks")
+            .child(FirebaseHelper.getIdUser())
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val taskList = mutableListOf<Task>()
+                    for (ds in snapshot.children) {
+                        val task = ds.getValue(Task::class.java) as Task
+                        if (task.status == Status.DOING) {
+                            taskList.add(task)
+                        }
+                    }
+                    binding.progressBar.isVisible = false
+                    listEmpty(taskList)
+
+                    taskList.reverse()
+                    taskAdapter.submitList(taskList)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.i("INFOTESTE", "onCancelled")
+                }
+
+            })
+    }
+
     private fun deleteTasks(task: Task) {
         FirebaseHelper.getDatabase()
             .child("tasks")
@@ -129,6 +162,12 @@ class DoingFragment : Fragment() {
                         R.string.text_delete_success_task,
                         Toast.LENGTH_SHORT
                     ).show()
+
+                    val oldList = taskAdapter.currentList
+                    val newList = oldList.toMutableList().apply {
+                        remove(task)
+                    }
+                    taskAdapter.submitList(newList)
                 } else {
                     Toast.makeText(requireContext(), R.string.error_generic, Toast.LENGTH_SHORT)
                         .show()
@@ -155,33 +194,6 @@ class DoingFragment : Fragment() {
             }
     }
 
-    private fun getTasks() {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getIdUser())
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val taskList = mutableListOf<Task>()
-                    for (ds in snapshot.children) {
-                        val task = ds.getValue(Task::class.java) as Task
-                        if (task.status == Status.DOING) {
-                            taskList.add(task)
-                        }
-                    }
-                    binding.progressBar.isVisible = false
-                    listEmpty(taskList)
-
-                    taskList.reverse()
-                    taskAdapter.submitList(taskList)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(requireContext(), R.string.error_generic, Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-            })
-    }
 
     //Verifica se a minha lista é vazia ou não
     private fun listEmpty(taskList: List<Task>) {

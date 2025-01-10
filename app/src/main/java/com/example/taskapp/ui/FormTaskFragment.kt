@@ -18,15 +18,20 @@ import com.example.taskapp.util.FirebaseHelper
 import com.example.taskapp.util.initToolbar
 import com.example.taskapp.util.showBottomSheet
 
-class FormTaskFragment : Fragment() {
+class FormTaskFragment : BaseFragment() {
 
     private var _binding: FragmentFormTaskBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var task: Task
-    private val args: FormTaskFragmentArgs by navArgs()
-    private val viewModel: TaskViewModel by activityViewModels()
     private var status: Status = Status.TODO
     private var newTask: Boolean = true
+
+
+    private val args: FormTaskFragmentArgs by navArgs()
+
+    private val viewModel: TaskViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +44,22 @@ class FormTaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar(binding.toolbar)
+
+
         getArgs()
         initListerners()
     }
+
+    private fun getArgs() {
+        args.task.let {
+            if (it != null) {
+                this.task = it
+
+                configTask()
+            }
+        }
+    }
+
 
     private fun initListerners() {
         binding.btnSave.setOnClickListener {
@@ -56,14 +74,38 @@ class FormTaskFragment : Fragment() {
         }
     }
 
+    private fun configTask() {
+        newTask = false
+        status = task.status
+        binding.textToolbar.setText(R.string.text_toolbar_update_sucess_form_task_fragment)
+        binding.edtDescription.setText(task.description)
+        setStatus()
+
+    }
+
+    private fun setStatus() {
+        val id = when (task.status) {
+            Status.TODO -> R.id.rbTodo
+            Status.DOING -> R.id.rbDoing
+            else -> R.id.rbDone
+        }
+        binding.rgStatus.check(id)
+    }
+
     private fun validateData() {
         val description = binding.edtDescription.text.toString().trim()
 
         if (description.isNotEmpty()) {
+
+            hideKeyboard()
+
             binding.progressBar.isVisible = true
+
             if (newTask) task = Task()
             task.description = description
             task.status = status
+
+
             saveTask()
 
         } else {
@@ -89,6 +131,7 @@ class FormTaskFragment : Fragment() {
                     } else {
                         // Editando tarefa
                         viewModel.setUpdateTask(task)
+
                         binding.progressBar.isVisible = false
 
                     }
@@ -101,33 +144,6 @@ class FormTaskFragment : Fragment() {
             }
     }
 
-    private fun configTask() {
-        newTask = false
-        status = task.status
-        binding.textToolbar.setText(R.string.text_toolbar_update_sucess_form_task_fragment)
-        binding.edtDescription.setText(task.description)
-        setStatus()
-
-    }
-
-    private fun setStatus() {
-        val id = when (task.status) {
-            Status.TODO -> R.id.rbTodo
-            Status.DOING -> R.id.rbDoing
-            else -> R.id.rbDone
-        }
-        binding.rgStatus.check(id)
-    }
-
-    private fun getArgs() {
-        args.task.let {
-            if (it != null) {
-                this.task = it
-
-                configTask()
-            }
-        }
-    }
 
 
     override fun onDestroyView() {

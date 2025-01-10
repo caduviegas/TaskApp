@@ -1,6 +1,7 @@
 package com.example.taskapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,10 @@ class TodoFragment : Fragment() {
 
 
     private lateinit var taskAdapter: TaskAdapter
+
     private val viewModel: TaskViewModel by activityViewModels()
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,7 +47,9 @@ class TodoFragment : Fragment() {
 
 
         initListeners()
+
         initRecyclerView()
+
         getTasks()
 
     }
@@ -150,8 +156,7 @@ class TodoFragment : Fragment() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(requireContext(), R.string.error_generic, Toast.LENGTH_SHORT)
-                        .show()
+                    Log.i("INFOTESTE","onCancelled:")
                 }
 
             })
@@ -169,6 +174,11 @@ class TodoFragment : Fragment() {
                         R.string.text_delete_success_task,
                         Toast.LENGTH_SHORT
                     ).show()
+                    val oldList = taskAdapter.currentList
+                    val newList = oldList.toMutableList().apply {
+                        remove(task)
+                    }
+                    taskAdapter.submitList(newList)
                 } else {
                     Toast.makeText(requireContext(), R.string.error_generic, Toast.LENGTH_SHORT)
                         .show()

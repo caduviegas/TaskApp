@@ -28,11 +28,25 @@ class TaskAdapter(
 
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Task>() {
             override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
-                return oldItem.id == newItem.id && oldItem.description == newItem.description
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
-                return oldItem == newItem && oldItem.description == newItem.description
+                return when {
+                    oldItem.id != newItem.id -> {
+                        false
+                    }
+
+                    oldItem.status != newItem.status -> {
+                        false
+                    }
+
+                    oldItem.description != newItem.description -> {
+                        false
+                    }
+
+                    else -> true
+                }
             }
         }
     }
@@ -52,6 +66,7 @@ class TaskAdapter(
         val task = getItem(position)
 
         holder.binding.textDescription.text = task.description
+
         setIndicators(task, holder)
         onClickBtnStatus(task, holder)
     }
@@ -111,7 +126,5 @@ class TaskAdapter(
 
     }
 
-    inner class MyViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    }
+    inner class MyViewHolder(val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root)
 }
