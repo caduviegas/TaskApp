@@ -32,7 +32,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        auth = Firebase.auth
+        auth = FirebaseAuth.getInstance()
 
         initListerners()
         initTabs()
@@ -40,15 +40,8 @@ class HomeFragment : Fragment() {
 
     private fun initListerners() {
         binding.btnLogout.setOnClickListener {
-            showBottomSheet(
-                titleButton = R.string.text_button_dialog_confirm,
-                titleDialog = R.string.text_title_dialog_confirm_logout,
-                message = getString(R.string.text_message_dialog_confirm_logout),
-                onClick =  {
-                    auth.signOut()
-                    findNavController().navigate(R.id.action_homeFragment_to_authentication)
-                }
-            )
+            auth.signOut()
+            findNavController().navigate(R.id.action_homeFragment_to_authentication)
         }
     }
 
