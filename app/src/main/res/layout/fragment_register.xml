@@ -82,7 +82,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                style="@style/ButtonTheme"
+                android:background="@drawable/bg_btn"
+                android:textColor="@color/color_default"
+                app:backgroundTint="@null"
+                android:textAllCaps="false"
                 android:text="@string/text_button_register_fragment" />
 
             <ProgressBar

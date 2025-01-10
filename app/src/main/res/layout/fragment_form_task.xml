@@ -24,6 +24,7 @@
                 app:navigationIcon="@drawable/ic_back">
 
                 <TextView
+                    android:id="@+id/text_toolbar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/text_title_toolbar_form_task_fragment"
@@ -74,7 +75,7 @@
                 app:layout_constraintTop_toBottomOf="@id/edt_description" />
 
             <RadioGroup
-                android:id="@+id/rbStatus"
+                android:id="@+id/rgStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -89,6 +90,7 @@
                     android:buttonTint="@color/white"
                     android:text="@string/status_task_todo"
                     android:checked="true"
+                    style="@style/CustomRadioButton"
                     android:textColor="@color/white" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -98,6 +100,7 @@
                     android:layout_weight="1"
                     android:buttonTint="@color/white"
                     android:text="@string/status_task_doing"
+                    style="@style/CustomRadioButton"
                     android:textColor="@color/white" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -107,6 +110,7 @@
                     android:layout_weight="1"
                     android:buttonTint="@color/white"
                     android:text="@string/status_task_done"
+                    style="@style/CustomRadioButton"
                     android:textColor="@color/white" />
             </RadioGroup>
 
@@ -116,10 +120,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/text_button_form_task_fragment"
-                style="@style/ButtonTheme"
+                android:background="@drawable/bg_btn"
+                android:textColor="@color/color_default"
+                app:backgroundTint="@null"
+                android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rbStatus"
+                app:layout_constraintTop_toBottomOf="@+id/rgStatus"
                 app:layout_goneMarginTop="16dp" />
 
             <ProgressBar
