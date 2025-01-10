@@ -90,6 +90,7 @@
                     android:buttonTint="@color/white"
                     android:text="@string/status_task_todo"
                     android:checked="true"
+                    style="@style/CustomRadioButton"
                     android:textColor="@color/white" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -99,6 +100,7 @@
                     android:layout_weight="1"
                     android:buttonTint="@color/white"
                     android:text="@string/status_task_doing"
+                    style="@style/CustomRadioButton"
                     android:textColor="@color/white" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -108,6 +110,7 @@
                     android:layout_weight="1"
                     android:buttonTint="@color/white"
                     android:text="@string/status_task_done"
+                    style="@style/CustomRadioButton"
                     android:textColor="@color/white" />
             </RadioGroup>
 
