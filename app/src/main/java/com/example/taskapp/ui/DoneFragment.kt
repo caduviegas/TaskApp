@@ -47,7 +47,7 @@ class DoneFragment : Fragment() {
 
         initRecyclerView()
 
-        getTasks()
+        //getTasks()
     }
 
     private fun observeViewModel() {

@@ -129,6 +129,18 @@ class FormTaskFragment : BaseFragment() {
 
             findNavController().popBackStack()
         }
+
+        viewModel.taskUpdate.observe(viewLifecycleOwner) {
+            Toast.makeText(
+                requireContext(),
+                R.string.text_update_success_form_task_fragment,
+                Toast.LENGTH_SHORT
+            ).show()
+
+            binding.progressBar.isVisible = false
+
+
+        }
     }
 
 

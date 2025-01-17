@@ -51,7 +51,10 @@ class TodoFragment : Fragment() {
 
         initRecyclerView()
 
-        getTasks()
+        observeViewModel()
+
+        viewModel.getTasks(Status.TODO)
+
 
     }
 
@@ -62,10 +65,14 @@ class TodoFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        observeViewModel()
     }
 
     private fun observeViewModel() {
+        viewModel.taskList.observe(viewLifecycleOwner) { taskList ->
+            binding.progressBar.isVisible = false
+            listEmpty(taskList)
+            taskAdapter.submitList(taskList)
+        }
         viewModel.taskInsert.observe(viewLifecycleOwner) { task ->
             if (task.status == Status.TODO) {
                 //Armazena a lista atual do adapter
@@ -83,26 +90,28 @@ class TodoFragment : Fragment() {
 
             }
         }
+
         viewModel.taskUpdate.observe(viewLifecycleOwner) { updateTask ->
-            if (updateTask.status == Status.TODO) {
+            //Armazena a lista atual do adapter
+            val oldList = taskAdapter.currentList
 
-
-                //Armazena a lista atual do adapter
-                val oldList = taskAdapter.currentList
-
-                //Gera uma nova lista a partir da lista antiga já com a tarefa atualizada
-                val newList = oldList.toMutableList().apply {
+            //Gera uma nova lista a partir da lista antiga já com a tarefa atualizada
+            val newList = oldList.toMutableList().apply {
+                if (updateTask.status == Status.TODO) {
                     find { it.id == updateTask.id }?.description = updateTask.description
+
+                } else {
+                    remove(updateTask)
                 }
-                // Armazena a posição da tarefa a ser atualizada na lista
-                val position = newList.indexOfFirst { it.id == updateTask.id }
-
-                //Envia a lista atualizada para o Adapter
-                taskAdapter.submitList(newList)
-
-                //Atualiza a tarefa pela posição do adapter
-                taskAdapter.notifyItemChanged(position)
             }
+            // Armazena a posição da tarefa a ser atualizada na lista
+            val position = newList.indexOfFirst { it.id == updateTask.id }
+
+            //Envia a lista atualizada para o Adapter
+            taskAdapter.submitList(newList)
+
+            //Atualiza a tarefa pela posição do adapter
+            taskAdapter.notifyItemChanged(position)
         }
     }
 
@@ -147,38 +156,12 @@ class TodoFragment : Fragment() {
 
             TaskAdapter.SELECT_NEXT -> {
                 task.status = Status.DOING
-                updateTask(task)
+                viewModel.updateTask(task)
             }
         }
 
     }
 
-    private fun getTasks() {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getIdUser())
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val taskList = mutableListOf<Task>()
-                    for (ds in snapshot.children) {
-                        val task = ds.getValue(Task::class.java) as Task
-                        if (task.status == Status.TODO) {
-                            taskList.add(task)
-                        }
-                    }
-                    binding.progressBar.isVisible = false
-                    listEmpty(taskList)
-
-                    taskList.reverse()
-                    taskAdapter.submitList(taskList)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.i("INFOTESTE", "onCancelled:")
-                }
-
-            })
-    }
 
     private fun setPositionRecyclerView() {
         taskAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -220,25 +203,6 @@ class TodoFragment : Fragment() {
                         remove(task)
                     }
                     taskAdapter.submitList(newList)
-                } else {
-                    Toast.makeText(requireContext(), R.string.error_generic, Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
-    }
-
-    private fun updateTask(task: Task) {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getIdUser())
-            .child(task.id)
-            .setValue(task).addOnCompleteListener { result ->
-                if (result.isSuccessful) {
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.text_update_success_form_task_fragment,
-                        Toast.LENGTH_SHORT
-                    ).show()
                 } else {
                     Toast.makeText(requireContext(), R.string.error_generic, Toast.LENGTH_SHORT)
                         .show()
