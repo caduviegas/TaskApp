@@ -111,7 +111,7 @@ class FormTaskFragment : BaseFragment() {
                 viewModel.insertTask(task)
 
             } else {
-                //  viewModel.updateTask(task)
+                viewModel.updateTask(task)
             }
 
         } else {
