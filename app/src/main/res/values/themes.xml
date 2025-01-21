@@ -39,7 +39,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="bottomSheetDialog" parent="Widget.Design.BottomSheet.Modal">
+    <style name="bottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+    </style>
+    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
 </resources>
