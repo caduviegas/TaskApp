@@ -27,6 +27,8 @@ class DoingFragment : Fragment() {
     private lateinit var taskAdapter: TaskAdapter
 
     private val viewModel: TaskViewModel by activityViewModels()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,40 +68,6 @@ class DoingFragment : Fragment() {
 
             }
         }
-        viewModel.taskInsert.observe(viewLifecycleOwner) { stateView ->
-
-            when (stateView) {
-                is StateView.OnLoading -> binding.progressBar.isVisible = true
-                is StateView.OnSuccess -> {
-                    binding.progressBar.isVisible = false
-
-                    if (stateView.data?.status == Status.DOING) {
-                        //Armazena a lista atual do adapter
-                        val oldList = taskAdapter.currentList
-
-                        //Gera uma nova lista a partir da lista antiga já com a tarefa atualizada
-                        val newList = oldList.toMutableList().apply {
-                            add(0, stateView.data)
-                        }
-
-                        //Envia a lista atualizada para o Adapter
-                        taskAdapter.submitList(newList)
-
-                        setPositionRecyclerView()
-
-                    }
-
-                }
-
-                is StateView.OnError -> {
-                    Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
-                    binding.progressBar.isVisible = false
-                }
-
-            }
-
-
-        }
         viewModel.taskUpdate.observe(viewLifecycleOwner) { stateView ->
 
             when (stateView) {
@@ -111,6 +79,10 @@ class DoingFragment : Fragment() {
 
                     //Gera uma nova lista a partir da lista antiga já com a tarefa atualizada
                     val newList = oldList.toMutableList().apply {
+                        if(!oldList.contains(stateView.data) && stateView.data?.status == Status.DOING){
+                            add(0,stateView.data)
+                            setPositionRecyclerView()
+                        }
                         if (stateView.data?.status == Status.DOING) {
                             find { it.id == stateView.data.id }?.description =
                                 stateView.data.description
@@ -127,6 +99,8 @@ class DoingFragment : Fragment() {
 
                     //Atualiza a tarefa pela posição do adapter
                     taskAdapter.notifyItemChanged(position)
+
+                    listEmpty(newList)
 
                 }
 
@@ -154,6 +128,8 @@ class DoingFragment : Fragment() {
                         remove(stateView.data)
                     }
                     taskAdapter.submitList(newList)
+                    listEmpty(newList)
+
 
                 }
 
